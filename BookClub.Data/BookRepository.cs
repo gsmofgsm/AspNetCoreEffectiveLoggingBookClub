@@ -10,17 +10,18 @@ namespace BookClub.Data
     public class BookRepository : IBookRepository
     {
         private readonly IDbConnection _db;
-        private readonly ILogger<BookRepository> _logger;
+        private readonly ILogger _logger;
 
-        public BookRepository(IDbConnection db, ILogger<BookRepository> logger)
+        public BookRepository(IDbConnection db, ILoggerFactory loggerFactory)
         {
             _db = db;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger("Database"); // this allows for logging all database-related entries, even from other classes(?)
         }
 
         public List<Book> GetAllBooks()
         {
             _logger.LogInformation("Inside the repository about to call GetAllBooks.");
+            _logger.LogDebug(DataEvents.GatMany, "Debugging information for stored proc: {ProcName}", "GetAllBooks");
             var books = _db.Query<Book>("GetAllBooks", commandType: CommandType.StoredProcedure)
                 .ToList();
             return books;

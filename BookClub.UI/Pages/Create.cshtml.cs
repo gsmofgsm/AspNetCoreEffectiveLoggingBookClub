@@ -7,11 +7,19 @@ using System.Threading.Tasks;
 using BookClub.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace BookClub.UI.Pages
 {
     public class CreateModel : PageModel
     {
+        private readonly ILogger<CreateModel> _logger;
+
+        public CreateModel(ILogger<CreateModel> logger)
+        {
+            _logger = logger;
+        }
+
         [BindProperty]
         public Book Book { get; set; }
         public void OnGet()
@@ -25,6 +33,7 @@ namespace BookClub.UI.Pages
             {
                 return Page();
             }
+            _logger.LogInformation("Submitting new book: {Book}", Book);
             using (var http = new HttpClient(new StandardHttpMessageHandler(HttpContext)))
             {
                 await http.PostAsJsonAsync("https://localhost:44322/api/Book", Book);

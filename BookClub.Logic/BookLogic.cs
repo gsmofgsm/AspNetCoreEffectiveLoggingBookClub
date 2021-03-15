@@ -1,6 +1,7 @@
 ﻿using BookClub.Data;
 using BookClub.Entities;
 using BookClub.Logic.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace BookClub.Logic
     public class BookLogic : IBookLogic
     {
         private readonly IBookRepository _repo;
+        private readonly ILogger _logger;
 
-        public BookLogic(IBookRepository repo)
+        public BookLogic(IBookRepository repo, ILogger logger)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         public async Task<List<BookModel>> GetAllBooks()
@@ -60,11 +63,16 @@ namespace BookClub.Logic
                         bookToReturn.InfoLink = thisBook.VolumeInfo?.InfoLink;
                         bookToReturn.Thumbnail = thisBook.VolumeInfo?.ImageLinks?.Thumbnail;
                     }
+                    else
+                    {
+                        _logger.LogWarning("No book information found in Google for ISBN {ISBN}.", book.Isbn);
+                    }
                 }
                 catch (Exception ex)
                 {
 
-                    // it's ok if google api call doesn't work      
+                    // it's ok if google api call doesn't work
+                    _logger.LogError("Api failure in Google API call.", ex);
                 }
                 return bookToReturn;
             }
@@ -79,6 +87,7 @@ namespace BookClub.Logic
                 case 111:
                     return "Erik";
                 default:
+                    _logger.LogWarning("Unknown user {UserId} in database.", submitter);
                     return "Alice";
             }
         }
