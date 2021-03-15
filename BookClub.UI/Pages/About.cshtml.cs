@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 
 namespace BookClub.UI.Pages
 {
@@ -6,7 +7,7 @@ namespace BookClub.UI.Pages
     {
         public void OnGet()
         {
-
+            throw new Exception("Users should not see this!");
         }
     }
 }

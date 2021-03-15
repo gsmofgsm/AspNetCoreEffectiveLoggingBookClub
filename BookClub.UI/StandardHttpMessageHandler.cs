@@ -25,25 +25,25 @@ namespace BookClub.UI
 
             if (!response.IsSuccessStatusCode)
             {
-                var error = "";
-                var id = "";
+                //var error = "";
+                //var id = "";
 
-                if (response.Content.Headers.ContentLength > 0)
-                {
-                    var j = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    error = (string)j["Title"];
-                    id = (string)j["Id"];
-                }
+                //if (response.Content.Headers.ContentLength > 0)
+                //{
+                //    var j = JObject.Parse(await response.Content.ReadAsStringAsync());
+                //    error = (string)j["Title"];
+                //    id = (string)j["Id"];
+                //}
 
                 var ex = new Exception("API Failure");
 
                 ex.Data.Add("API Route", $"GET {request.RequestUri}");
                 ex.Data.Add("API Status", (int)response.StatusCode);
-                if (!string.IsNullOrEmpty(error))
-                {
-                    ex.Data.Add("API Error", error);
-                    ex.Data.Add("API ErrorId", id);
-                }
+                //if (!string.IsNullOrEmpty(error))
+                //{
+                //    ex.Data.Add("API Error", error);
+                //    ex.Data.Add("API ErrorId", id);
+                //}
                 throw ex;
             }
 
