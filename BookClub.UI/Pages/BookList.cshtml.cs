@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace BookClub.UI.Pages
 {
     public class BookListModel : PageModel
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<BookListModel> _logger;
         public List<Book> Books;
 
         public BookListModel(ILogger<BookListModel> logger)
@@ -20,6 +21,10 @@ namespace BookClub.UI.Pages
 
         public async Task OnGetAsync()
         {
+            var userId = User.Claims.FirstOrDefault(a => a.Type == "sub")?.Value;
+            _logger.LogInformation("{UserName} - {UserId} is about to call the book api to get all books. {Claims}",
+                User.Identity.Name, userId, User.Claims);
+
             _logger.LogInformation("About to call API to get book list");
             using (var http = new HttpClient(new StandardHttpMessageHandler(HttpContext)))
             {
