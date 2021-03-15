@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookClub.Data;
@@ -44,8 +45,10 @@ namespace BookClub.API.Controllers
 
         // POST: api/Book
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Book bookToSubmit)
         {
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(a => a.Type == "sub")?.Value);
+            _bookRepo.SubmitNewBook(bookToSubmit, userId);
         }
 
         // PUT: api/Book/5
