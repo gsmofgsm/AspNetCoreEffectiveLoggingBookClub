@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BookClub.Data;
 using BookClub.Entities;
+using BookClub.Logic;
+using BookClub.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,22 +15,24 @@ namespace BookClub.API.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookRepository _bookRepo;
+        private readonly IBookLogic _bookLogic;
         private readonly ILogger<BookController> _logger;
 
-        public BookController(IBookRepository bookRepo, ILogger<BookController> logger)
+        public BookController(IBookRepository bookRepo, IBookLogic bookLogic, ILogger<BookController> logger)
         {
             _bookRepo = bookRepo;
+            _bookLogic = bookLogic;
             _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<Book> GetBooks()
+        public async Task<IEnumerable<BookModel>> GetBooks()
         {
             var userId = User.Claims.FirstOrDefault(a => a.Type == "sub")?.Value;
             _logger.LogInformation("{userId} is inside get all books API call. {claims}",
                 userId, User.Claims);
 
-            return _bookRepo.GetAllBooks();
+            return await _bookLogic.GetAllBooks();
             //return _bookRepo.GetAllBooksThrowError();
         }
 

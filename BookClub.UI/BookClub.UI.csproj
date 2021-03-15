@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookClub.Entities\BookClub.Entities.csproj" />
+    <ProjectReference Include="..\BookClub.Logic\BookClub.Logic.csproj" />
   </ItemGroup>
 
 

@@ -8,5 +8,7 @@
         public string Category { get; set; }
         public string Genre { get; set; }
         public string Description { get; set; }
+        public string Isbn { get; set; }
+        public int Submitter { get; set; }
     }
 }
